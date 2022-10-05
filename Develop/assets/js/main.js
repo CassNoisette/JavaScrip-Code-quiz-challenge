@@ -14,6 +14,7 @@ let time = 99;
 let timer;
 
 
+  // create the question elements
 var questions = [
   {
     questionTitle: "Commonly used data types DO NOT include:",
@@ -29,11 +30,26 @@ var questions = [
   },
 
   {
-    questionTitle: "Arrays in JavaScript can be used to store:",
+    questionTitle: "Arrays in JavaScript can be used to store _____",
     options: ["1.numbers and strings", "2.other arrays", "3.booleans", "4.all of the above"],
     answer: "4.all of the above",
 
   },
+
+  {
+    questionTitle: "String values must be enclosed within ______ when being assigned to variables.",
+    options: ["1.commas", "2.curly brackets", "3.quotes", "4.parentheses"],
+    answer: "3.quotes",
+
+  },
+
+  {
+    questionTitle: "A very useful tool used during development and debugging for printing content to the debugger is",
+    options: ["1.Javascript" , " 2.terminal / bash" , "3.for loops", "4.console.log"],
+    answer: "4.console.log",
+
+  },
+
 ]
 
 
@@ -63,6 +79,16 @@ function setNextQuestion() {
   }
 }
 
+
+function startTimer() {
+  timer = setInterval(function () {
+    time--
+    clock.textContent = time;
+
+  }, 1000)
+}
+
+
 function selectAnswer() {
   console.log(this.dataset.value)
   if (this.dataset.value === questions[currentQuestion].answer){
@@ -70,52 +96,46 @@ function selectAnswer() {
     setNextQuestion()
 
   }
+
+  if (this.dataset.value !== questions[currentQuestion].answer){
   time = time - 10
-  clock.textContent = time
+  }
+
+  if (time < 0) {
+  time = 0; 
+  }
+
+  clock.textContent = time;
+
+  if (currentQuestion === questions.length) {
+    quizEnd();
+  } else {
+    setNextQuestion();
+  }
+}
+
+function quizEnd() {
+  // stop timer
+  clearInterval(clock);
+
+  // show end screen
+  var endScreenEl = document.getElementById("end-screen");
+  endScreenEl.removeAttribute("class");
+
+  // show final score
+  var finalScoreEl = document.getElementById("final-score");
+  finalScoreEl.textContent = time;
+
+  // hide questions section
+  questionsElement.setAttribute("class", "hide");
 }
 
 
-function startTimer() {
-  timer = setInterval(function () {
-    time--
-    clock.textContent = time
-
-  }, 1000)
-
-}
-// function addQuestion() {
-
-  // create the question elements
-
-  // need a collection of objects that hold the questions
 
 
-  // const question2 = new question()
-  // const options2 =
-
-  // const question3 = new question("Arrays in JavaScript can be used to store:")
-  // const option3 = ["1.numbers and strings", "2.other arrays", "3.booleans", "4.all of the above"]
 
 
-  // const question4 = new question("String values must be enclosed within ... when being assigned to variables.")
-  // const option4 = ["1.commas", "2.curly brackets", "3.quotess ", " 4.parentheses"]
-
-
-  // const question5 = new question ("A very useful tool used during development and debugging for printing content to the debugger is:")
-  // const option5 = ["1.Javascript" , " 2.terminal / bash" , "3.for loops", "4.console.lol"]
-
-
-  // need to keep a count of the question that is displayed
-  // need to keep score
-  // need to keep the time
-
-
-  //   All done!
-  //   Your final score is
-  //    Enter initials
-  // Submit
-
-
+  
 
 
 
