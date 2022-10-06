@@ -14,6 +14,7 @@ var initialsElement = document.querySelector("#initials");
 let currentQuestion = 0;
 let time = 99;
 let timer;
+let timeout;
 
 
   // create the question elements
@@ -59,16 +60,49 @@ startButton.addEventListener('click', startGame)
 
 
 function startGame() {
-  console.log('Start game')
-  startButton.classList.add('hide')
-  questionContainerElement.classList.remove('hide')
-  startTimer()
-  setNextQuestion()
+  console.log('Start game');
+  startButton.classList.add('hide');
+  questionContainerElement.classList.remove('hide');
+  startTimer();
+  setNextQuestion();
 }
 
+
+function startTimer() {
+  timer = setInterval(function () {
+    if (time == 0){
+    clearInterval(timer)
+  }
+  else{time--;
+    clock.textContent = time;}
+    
+
+  }, 1000);
+
+  // if (time < 0) {
+  //   time = 0; 
+  //   }
+}
+
+
+function endTimer() {
+  // update time
+  // time--;
+  // clock.textContent = time;
+
+  // check if user ran out of time
+  if (time <= 0) {
+    clearInterval(timer)
+    endQuiz();
+  }
+}
+
+
+
+
 function setNextQuestion() {
-  questionElement.textContent = questions[currentQuestion].questionTitle
-  answerButtonsElement.textContent = ""
+  questionElement.textContent = questions[currentQuestion].questionTitle;
+  answerButtonsElement.textContent = "";
 
   for (let i = 0; i < questions[currentQuestion].options.length; i++) {
     let answerButton = document.createElement("button");
@@ -76,62 +110,39 @@ function setNextQuestion() {
     answerButton.addEventListener('click', selectAnswer);
     answerButton.setAttribute("data-value", questions[currentQuestion].options[i]);
     answerButton.textContent = questions[currentQuestion].options[i];
-    answerButtonsElement.appendChild(answerButton)
+    answerButtonsElement.appendChild(answerButton);
 
   }
 }
 
 
-function startTimer() {
-  timer = setInterval(function () {
-    time--
-    clock.textContent = time;
-
-  }, 1000)
-}
 
 
 function selectAnswer() {
-  console.log(this.dataset.value)
+  console.log(this.dataset.value);
   if (this.dataset.value === questions[currentQuestion].answer){
-    currentQuestion++
-    setNextQuestion()
+    currentQuestion++;
+    setNextQuestion();
 
   }
 
   if (this.dataset.value !== questions[currentQuestion].answer){
-  time = time - 10
+  time = time - 10;
   }
 
-  if (time < 0) {
-  time = 0; 
-  }
 
-  clock.textContent = time;
+  // clock.textContent = time;
 
-  if (currentQuestion === questions.length) {
+  if (currentQuestion == questions.length) {
     endQuiz();
   } else {
     setNextQuestion();
   }
 }
 
-
-function clockEnds() {
-  // update time
-  time--;
-  clock.textContent = time;
-
-  // check if user ran out of time
-  if (time <= 0) {
-    endQuiz();
-  }
-}
-
-
 function endQuiz() {
   // stop timer
-  clearInterval(time);
+  clearInterval(timer);
 
   // show end screen
   var endScreenElement = document.getElementById("end-screen");
@@ -142,8 +153,11 @@ function endQuiz() {
   finalScoreElement.textContent = time;
 
   // hide questions section
-  questionsElement.setAttribute("class", "hide");
+  questionContainerElement.setAttribute("class", "hide");
 }
+
+
+
 
 function saveHighscore() {
   // get value of input box
