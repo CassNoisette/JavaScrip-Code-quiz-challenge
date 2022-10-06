@@ -4,10 +4,12 @@ console.log("Sam, your questions");
 
 const startButton = document.getElementById('start-button')
 // const nextButton = document.getElementById('next-button')
+var submitButton = document.querySelector("#submit");
 const questionContainerElement = document.getElementById("question-container");
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons');
 const clock = document.getElementById('clock')
+var initialsElement = document.querySelector("#initials");
 
 let currentQuestion = 0;
 let time = 99;
@@ -108,32 +110,85 @@ function selectAnswer() {
   clock.textContent = time;
 
   if (currentQuestion === questions.length) {
-    quizEnd();
+    endQuiz();
   } else {
     setNextQuestion();
   }
 }
 
-function quizEnd() {
+
+function clockEnds() {
+  // update time
+  time--;
+  clock.textContent = time;
+
+  // check if user ran out of time
+  if (time <= 0) {
+    endQuiz();
+  }
+}
+
+
+function endQuiz() {
   // stop timer
-  clearInterval(clock);
+  clearInterval(time);
 
   // show end screen
-  var endScreenEl = document.getElementById("end-screen");
-  endScreenEl.removeAttribute("class");
+  var endScreenElement = document.getElementById("end-screen");
+  endScreenElement.removeAttribute("class");
 
   // show final score
-  var finalScoreEl = document.getElementById("final-score");
-  finalScoreEl.textContent = time;
+  var finalScoreElement = document.getElementById("final-score");
+  finalScoreElement.textContent = time;
 
   // hide questions section
   questionsElement.setAttribute("class", "hide");
 }
 
+function saveHighscore() {
+  // get value of input box
+  var initials = initialsEl.value.trim();
+
+  if (initials !== "") {
+    // get saved scores from localstorage, or if not any, set to empty array
+    var highscores =
+      JSON.parse(window.localStorage.getItem("highscores")) || [];
+
+    // format new score object for current user
+    var newScore = {
+      score: time,
+      initials: initials
+    };
+
+    // save to localstorage
+    highscores.push(newScore);
+    window.localStorage.setItem("highscores", JSON.stringify(highscores));
+
+  }
+
+  highscores.forEach(function(score) {
+    // create li tag for each high score
+    var liTag = document.createElement("li");
+    liTag.textContent = score.initials + " - " + score.score;
+
+    // display on page
+    var olEl = document.getElementById("highscores");
+    olEl.appendChild(liTag);
+  })
+}
+
+function checkForEnter(event) {
+  // "13" represents the enter key
+  if (event.key === "Enter") {
+    saveHighscore();
+  }
+}
+
+// submit initials
+submitButton.addEventListener('click', saveHighscore);
 
 
-
-
+// initials.Element.onkeyup = checkForEnter;
 
   
 
