@@ -70,7 +70,7 @@ function startGame() {
 
 function startTimer() {
   timer = setInterval(function () {
-    if (time == 0){
+    if (time === 0){
     clearInterval(timer)
   }
   else{time--;
@@ -86,11 +86,10 @@ function startTimer() {
 
 
 function endTimer() {
-  // update time
-  // time--;
-  // clock.textContent = time;
-
-  // check if user ran out of time
+  if (time === 0) {
+    clearInterval(timer)
+    endQuiz();
+  }
   if (time <= 0) {
     clearInterval(timer)
     endQuiz();
@@ -201,39 +200,4 @@ function checkForEnter(event) {
 // submit initials
 submitButton.addEventListener('click', saveHighscore);
 
-
-// initials.Element.onkeyup = checkForEnter;
-
-  
-
-
-
-
-
-
-  // modify the text/attributes
-  // modify one of the attributes to say right or wrong
-
-  // append all elements to something on the page
-
-  // for all the s, add event listener
-
-  // WHEN I answer a question
-  // if answered correctly
-  // add points
-  // show as correct
-  // WHEN I answer a question incorrectly
-  // THEN time is subtracted from the clock
-  // show as incorrect
-
-  // after the answer,
-  // THEN I am presented with another question
-  // need a function call to present the question
-
-  // if no other questions,
-  // go to highscore screen
-
-
-
-// eventListener here // when i click the start 
 
